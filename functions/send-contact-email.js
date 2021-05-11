@@ -12,12 +12,10 @@ exports.handler = async (event) => {
     const ses = new SESClient({
       region: "eu-west-1",
       credentials: {
-        AccessKeyId: MAILER_AWS_ACCESS_KEY_ID,
-        SecretAccessKey: MAILER_AWS_SECRET_ACCESS_KEY,
+        accessKeyId: MAILER_AWS_ACCESS_KEY_ID,
+        secretAccessKey: MAILER_AWS_SECRET_ACCESS_KEY,
       },
     });
-
-    console.log(process.env);
 
     const { name, email, message } = JSON.parse(event.body);
 
