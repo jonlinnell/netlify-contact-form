@@ -10,8 +10,11 @@ exports.handler = async (event) => {
 
     const sendCommand = new SendEmailCommand({
       Destination: RECIPIENT,
+      destination: RECIPIENT,
       Source: MAILER_ADDRESS,
+      source: MAILER_ADDRESS,
       Message: `You got a message from ${name} <${email}>:\n\n${message}`,
+      message: `You got a message from ${name} <${email}>:\n\n${message}`,
     });
 
     const sendResponse = await client.send(sendCommand);
@@ -20,6 +23,9 @@ exports.handler = async (event) => {
       statusCode: 200,
       body: JSON.stringify({
         response: sendResponse,
+        source,
+        destination,
+        message,
       }),
     };
   } catch (err) {
