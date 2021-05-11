@@ -9,23 +9,38 @@ const {
 
 exports.handler = async (event) => {
   try {
-    const client = new SESClient({
+    const ses = new SESClient({
       region: "eu-west-1",
       credentials: {
-        accessKeyId: MAILER_AWS_ACCESS_KEY_ID,
-        secretAccessKey: MAILER_AWS_SECRET_ACCESS_KEY,
+        AccessKeyId: MAILER_AWS_ACCESS_KEY_ID,
+        SecretAccessKey: MAILER_AWS_SECRET_ACCESS_KEY,
       },
     });
 
+    console.log(process.env);
+
     const { name, email, message } = JSON.parse(event.body);
 
-    const sendCommand = new SendEmailCommand({
-      Destination: RECIPIENT,
+    const params = {
+      Destination: {
+        ToAddresses: [RECIPIENT],
+      },
+      Message: {
+        Body: {
+          Text: {
+            Charset: "UTF-8",
+            Data: `You got a message from ${name} <${email}>:\n\n${message}`,
+          },
+        },
+        Subject: {
+          Charset: "UTF-8",
+          Data: `New message from ${name}`,
+        },
+      },
       Source: MAILER_ADDRESS,
-      Message: `You got a message from ${name} <${email}>:\n\n${message}`,
-    });
+    };
 
-    const sendResponse = await client.send(sendCommand);
+    const sendResponse = await ses.send(new SendEmailCommand(params));
 
     return {
       statusCode: 200,
