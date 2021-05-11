@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0"
+      crossorigin="anonymous"
+    />
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="">
+        <h1>Contact</h1>
+
+        <form id="form">
+          <div class="mb-2">
+            <label for="input-name" class="form-label">Your name</label>
+            <input
+              name="input-name"
+              class="form-control"
+              aria-describedby="input-name"
+            />
+          </div>
+          <div class="mb-2">
+            <label for="input-email" class="form-label"
+              >Your email address</label
+            >
+            <input
+              type="email"
+              name="input-email"
+              class="form-control"
+              aria-describedby="input-email"
+            />
+          </div>
+          <div class="mb-2">
+            <label for="input-message" class="form-label"
+              >Type your message here</label
+            >
+            <textarea
+              name="input-message"
+              class="form-control"
+              aria-describedby="input-message"
+            ></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <pre id="result"></pre>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      async function handleSubmit(e) {
+        e.preventDefault();
+        console.log(e);
+
+        const name = e.target[0]?.value;
+        const email = e.target[1]?.value;
+        const message = e.target[2]?.value;
+
+        // Do some validation here
+
+        console.log({ name, email, message });
+
+        const resultEl = document.getElementById("result");
+
+        resultEl.innerHTML = JSON.stringify({ name, email, message });
+
+        try {
+          const resp = await window.fetch();
+
+          const data = await resp.json();
+
+          resultEl.innerHTML = `${resultEl.innerHTML}\n\n${JSON.stringify({
+            data,
+          })}`;
+        } catch (err) {
+          console.error(`Couldn't send the message: ${err?.toString()}`);
+          console.error(err);
+        }
+      }
+
+      const form = document.getElementById("form");
+      form.addEventListener("submit", handleSubmit);
+    </script>
+  </body>
+</html>
