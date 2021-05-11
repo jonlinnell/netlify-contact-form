@@ -4,12 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "format": "prettier --write public netlify/functions"
+    "format": "prettier --write public functions"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "prettier": "^2.3.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-ses": "^3.15.0"
   }
 }
