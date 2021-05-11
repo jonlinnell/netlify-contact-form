@@ -81,7 +81,10 @@
         resultEl.innerHTML = JSON.stringify({ name, email, message });
 
         try {
-          const resp = await window.fetch();
+          const resp = await window.fetch('https://stoic-hamilton-e4e2f0.netlify.app/.netlify/functions/send-contact-email', {
+            method: 'POST',
+            body: JSON.stringify({ name, email, message }),
+          });
 
           const data = await resp.json();
 
