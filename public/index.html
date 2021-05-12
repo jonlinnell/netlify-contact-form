@@ -17,7 +17,7 @@
   </head>
   <body>
     <div class="container">
-      <div class="">
+      <div id="mailer-form">
         <h1>Contact</h1>
 
         <form id="form">
@@ -52,8 +52,6 @@
           </div>
           <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-
-        <pre id="result"></pre>
       </div>
     </div>
 
@@ -64,15 +62,25 @@
     ></script>
 
     <script>
-      function appendJSONToOutput(json) {
-        const resultEl = document.getElementById("result");
+      const displayAlert = (resultType, data) => {
+        const containerEl = document.getElementById("mailer-form");
 
-        resultEl.innerHTML = `${resultEl.innerHTML}\n\n${JSON.stringify(
-          json,
-          null,
-          2
-        )}`;
-      }
+        const id = Math.random().toString(36).substr(2);
+
+        const alertEl = document.createElement("div");
+        alertEl.setAttribute("id", id);
+        alertEl.setAttribute("role", "alert");
+        alertEl.classList.add(
+          "mt-3",
+          `alert`,
+          `alert-${resultType === "error" ? "danger" : resultType}`
+        );
+        alertEl.innerHTML = data;
+
+        containerEl?.appendChild(alertEl);
+
+        setTimeout(() => document.getElementById(id)?.remove(), 6000);
+      };
 
       async function handleSubmit(e) {
         e.preventDefault();
@@ -83,8 +91,6 @@
         const message = e.target[2]?.value;
 
         // Do some validation here
-
-        appendJSONToOutput({ name, email, message });
 
         try {
           const resp = await window.fetch(
@@ -100,12 +106,12 @@
 
           const data = await resp.json();
 
-          appendJSONToOutput(data);
+          displayAlert("success", "Message sent!");
         } catch (err) {
           console.error(`Couldn't send the message: ${err?.toString()}`);
           console.error(err);
 
-          appendJSONToOutput(data);
+          displayAlert("error", `Error: ${err.toString()}`);
         }
       }
 
